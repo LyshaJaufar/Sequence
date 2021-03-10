@@ -17,6 +17,15 @@ def main():
             logFileName = 'n'
 
 
+
+class Term():
+    def __init__(self, data):
+        self.currentTermValue = data
+        self.nextTerm = None 
+
+
+
+
 def startingTerm():
     firstTerm = int(input("Enter the first term: ")) 
     return firstTerm
