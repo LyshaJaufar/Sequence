@@ -2,49 +2,40 @@ import os, datetime, time, argparse, re
 
 parser = argparse.ArgumentParser(description="Simulate a sequence of numbers for a given starting point at a given common difference")
 parser.add_argument("-l", "--login", help="Name of logfile", nargs=1)
+parser.add_argument("-t", "--firstTerm", help="First term of sequence", nargs=1)
+parser.add_argument("-p", "--patternRule", help="Pattern rule for sequence", nargs=1)
+parser.add_argument("-s", "--sequenceLength", help="Length of the sequence", nargs=1)
 args = parser.parse_args()
 
 print("\nThis is a program that simulates a sequence of numbers of any length for a given starting point at a given common difference")
 
 def main():
+    global firstTerm, sequenceLength, patternRule
     if __name__ == '__main__':
+        if args.firstTerm == None:
+            firstTerm = startingTerm()
+        else:
+            firstTerm = int(args.firstTerm)
+
+        if args.patternRule == None:
+            patternRule = pattern()
+        else:
+            patternRule = int(args.patternRule)
+
+        if args.sequenceLength == None:
+            sequenceLength = lengthOfSequence()
+        else:
+            sequenceLength = int(args.sequenceLength)
+
         if args.login == None:
             logFileName = askToLogOrNot()
         elif args.login[0].lower() != 'n' or args.login[0].lower() != 'no':
             loginFileName = args.login[0]
-
         else:
             logFileName = 'n'
 
 
-
-class Term():
-    def __init__(self, data):
-        self.currentTermValue = data
-        self.nextTerm = None 
-
-class Sequence():
-    def __init__(self):
-        self.head = None
-
-    def sequenceOfTerms(self, data):
-        newTerm = Term()
-
-        # head of the sequence
-        if self.head == None:
-            self.head = newTerm
-            return 
-
-        prevTerm = self.head
-
-        while prevTerm.next:
-            prevTerm = prevTerm.next
-        prevTerm.next = newTerm
-
-        
-
-
-
+# consider making this into a class
 def startingTerm():
     firstTerm = int(input("Enter the first term: ")) 
     return firstTerm
@@ -55,24 +46,31 @@ def pattern():
 
 def lengthOfSequence():
     sequenceLength = int(input("Enter the length of your sequence: "))   
+    return sequenceLength
 
 def NthTerm():
-    nthTerm = int(input(""))
+    nthTerm = int(input("Enter nth term that you wish to find: "))
+    return nthTerm
 
-def sequence(index):
-    firstTerm = firstTerm()
-    patternRule = patternRule()
-    sequenceLength = lengthOfSequence()
-
+def sequence():
     sequence = [firstTerm]
     prev = firstTerm
+
     for i in range(sequenceLength):
         sequence.append(prev+patternRule)
         prev += patternRule
 
-    return sequence
+    print(*sequence)
 
 def findNthTerm():
+    nthTerm = NthTerm()
+    nthTermValue = firstTerm
+
+    for i in range(1, nthTerm):
+        nthTermValue += patternRule
+
+    print(nthTermValue)
+    
 
 
 
@@ -85,48 +83,8 @@ def askToLogOrNot():
         logFileName = 'n'
     return logFileName
 
+
+
 main()
-
-
-
-
-void draw(int h)
-{
-    // If nothing to draw
-    if (h == 0)
-    {
-        return;
-    }
-
-    // Draw pyramid of height h - 1
-    draw(h - 1);
-
-    // Draw one more row of width h
-    for (int i = 0; i < h; i++)
-    {
-        printf("#");
-    }
-    printf("\n");
-}
-
-
-void merge_sort(pair array[], int start, int end)
-{
-    //base case: 1 || 0 elements
-    if (start >= end)
-    {
-        return;
-    }
-
-    //Follow 3 steps
-    //1. Divide
-    int mid = (start + end) / 2;
-
-    //2. Sort
-    merge_sort(array, start, mid);   //Sort left half
-    merge_sort(array, mid + 1, end); //Sort right half
-
-    //3. Merge two parts
-    merge(array, start, mid, end);
-}
-
+sequence()
+findNthTerm()
