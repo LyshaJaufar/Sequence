@@ -23,6 +23,25 @@ class Term():
         self.currentTermValue = data
         self.nextTerm = None 
 
+class Sequence():
+    def __init__(self):
+        self.head = None
+
+    def sequenceOfTerms(self, data):
+        newTerm = Term()
+
+        # head of the sequence
+        if self.head == None:
+            self.head = newTerm
+            return 
+
+        prevTerm = self.head
+
+        while prevTerm.next:
+            prevTerm = prevTerm.next
+        prevTerm.next = newTerm
+
+        
 
 
 
