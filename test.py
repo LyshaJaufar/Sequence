@@ -1,6 +1,6 @@
 def function(input):
     global startValue, commonDifference
-    if input == 0:
+    if input == 1:
         return startValue
 
     else:
@@ -9,5 +9,5 @@ def function(input):
 startValue = int(input("Enter the starting value: "))
 lengthofsequence = int(input("Enter the length of the sequence: "))
 commonDifference = int(input("Enter the pattern rule: "))
-function(12)
-
+x=function(3)
+print(x)

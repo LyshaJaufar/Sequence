@@ -5,12 +5,13 @@ parser.add_argument("-l", "--login", help="Name of logfile", nargs=1)
 parser.add_argument("-t", "--firstTerm", help="First term of sequence", nargs=1)
 parser.add_argument("-p", "--patternRule", help="Pattern rule for sequence", nargs=1)
 parser.add_argument("-s", "--sequenceLength", help="Length of the sequence", nargs=1)
+parser.add_argument("-n", "--nthTerm", help="nth term to find in the sequence", nargs=1)
 args = parser.parse_args()
 
 print("\nThis is a program that simulates a sequence of numbers of any length for a given starting point at a given common difference")
 
 def main():
-    global firstTerm, sequenceLength, patternRule
+    global firstTerm, sequenceLength, patternRule, nthTerm
     if __name__ == '__main__':
         if args.firstTerm == None:
             firstTerm = startingTerm()
@@ -26,6 +27,11 @@ def main():
             sequenceLength = lengthOfSequence()
         else:
             sequenceLength = int(args.sequenceLength)
+
+        if args.nthTerm == None:
+            nthTerm = NthTerm()
+        else:
+            nthTerm = int(args.nthTerm)
 
         if args.login == None:
             logFileName = askToLogOrNot()
@@ -52,25 +58,37 @@ def NthTerm():
     nthTerm = int(input("Enter nth term that you wish to find: "))
     return nthTerm
 
-def sequence():
-    sequence = [firstTerm]
-    prev = firstTerm
 
-    for i in range(sequenceLength):
-        sequence.append(prev+patternRule)
-        prev += patternRule
 
+def evaluateSequence():
+    sequence = []
+    i = 1
+    while i != (sequenceLength + 1):
+        nextTerm = findNthTerm(i)
+        sequence.append(nextTerm)
+        i += 1
+    return sequence
+
+def findNthTerm(n):
+    if n == 1:
+        return firstTerm
+
+    else:
+        return patternRule + findNthTerm(n-1)
+
+
+def outputAnalysis():
+    valueOfNthTerm = findNthTerm(nthTerm)
+    sequence = evaluateSequence()
+
+    print("\n\nFind f(n) in the sequence given by:") 
+    print("\tf(1) = ", firstTerm)
+    print("\tf(n) = f(n - 1) -", patternRule,"\n")
+    print(f"Therefore, f({nthTerm}) =", valueOfNthTerm)
+
+    print(f"Evaluate the given arithmetic sequence from its first term upto its {sequenceLength}th term: ", end="")
     print(*sequence)
 
-def findNthTerm():
-    nthTerm = NthTerm()
-    nthTermValue = firstTerm
-
-    for i in range(1, nthTerm):
-        nthTermValue += patternRule
-
-    print(nthTermValue)
-    
 
 
 
@@ -86,5 +104,5 @@ def askToLogOrNot():
 
 
 main()
-sequence()
-findNthTerm()
+outputAnalysis()
+#findNthTerm()
