@@ -15,7 +15,7 @@ def main():
     global firstTerm, sequenceLength, patternRule, nthTerm, sequenceOfNumbers, defineSequenceOrNot
     if __name__ == '__main__':
         if args.defineSequence == None:
-            defineSequenceYesOrNo = askToDefineSequenceOrNot()
+            defineSequenceOrNot = askToDefineSequenceOrNot()
         elif args.defineSequence[0].lower() != 'n' or args.defineSequence[0].lower() != 'no':
             defineSequenceOrNot = True
             sequenceOfNumbers = list(input("Enter your arithmetic sequence: ").rstrip().split())
@@ -109,8 +109,12 @@ def outputAnalysis():
 
 
 
-
-
+def askToDefineSequenceOrNot():
+    defineSequenceYesOrNo = input("Would you like the program to construct a recursive formula for a given sequence? ")
+    if re.search("y(es)?", defineSequenceYesOrNo, re.IGNORECASE):
+        return True
+    else:
+        return False
 
 def askToLogOrNot():
     logFileYesOrNo = input("Would you like to save a logfile? ")
