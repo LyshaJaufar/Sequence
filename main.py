@@ -18,6 +18,7 @@ def main():
             defineSequenceYesOrNo = askToDefineSequenceOrNot()
         elif args.defineSequence[0].lower() != 'n' or args.defineSequence[0].lower() != 'no':
             defineSequenceOrNot = True
+            sequenceOfNumbers = list(input("Enter your arithmetic sequence: ").rstrip().split())
         else:
             defineSequenceOrNot = False
 
@@ -32,16 +33,19 @@ def main():
             else:
                 patternRule = int(args.patternRule)
 
+            if args.sequenceLength == None:
+                sequenceLength = lengthOfSequence()
+            else:
+                sequenceLength = int(args.sequenceLength)
+
+        else:
+            firstTerm = sequenceOfNumbers[0]
+            patternRule = findPatternRule()
+
         if args.nthTerm == None:
             nthTerm = NthTerm()
         else:
             nthTerm = int(args.nthTerm)
-
-        if args.sequenceLength == None:
-            sequenceLength = lengthOfSequence()
-        else:
-            sequenceLength = int(args.sequenceLength)
-
 
         if args.login == None:
             logFileName = askToLogOrNot()
@@ -86,9 +90,9 @@ def findNthTerm(n):
     else:
         return patternRule + findNthTerm(n-1)
 
-def defineRecursiveForumula(sequenceOfNumbers):
-    patternRule1 = sequenceOfNumbers[1] - sequenceOfNumbers[0]
-    return patternRule1
+def findPatternRule(sequenceOfNumbers):
+    patternRule = sequenceOfNumbers[1] - sequenceOfNumbers[0]
+    return patternRule
 
 def outputAnalysis():
     valueOfNthTerm = findNthTerm(nthTerm)
@@ -99,8 +103,9 @@ def outputAnalysis():
     print("\tf(n) = f(n - 1) -", patternRule,"\n")
     print(f"Therefore, f({nthTerm}) =", valueOfNthTerm)
 
-    print(f"Evaluate the given arithmetic sequence from its first term upto its {sequenceLength}th term: ", end="")
-    print(*sequence)
+    if defineSequenceOrNot == False: 
+        print(f"Evaluate the given arithmetic sequence from its first term upto its {sequenceLength}th term: ", end="")
+        print(*sequence)
 
 
 
