@@ -12,36 +12,24 @@ args = parser.parse_args()
 print("\nThis is a program that simulates a sequence of numbers of any length for a given starting point at a given common difference")
 
 def main():
-    global firstTerm, sequenceLength, patternRule, nthTerm, sequenceOfNumbers, defineSequenceOrNot
+    global firstTerm, sequenceLength, patternRule, nthTerm, sequenceOfNumbers, defineSequenceOrNot, extendSequence 
     if __name__ == '__main__':
         if args.defineSequence == None:
             defineSequenceOrNot = askToDefineSequenceOrNot()
-            sequenceOfNumbers = list(input("Enter your arithmetic sequence: ").rstrip().split())
+            extendSequence = askToExtendSequenceOrNot()
         elif args.defineSequence[0].lower() != 'n' or args.defineSequence[0].lower() != 'no':
             defineSequenceOrNot = True
             sequenceOfNumbers = list(input("Enter your arithmetic sequence: ").rstrip().split())
+            extendSequence = askToExtendSequenceOrNot()
         else:
             defineSequenceOrNot = False
+            extendSequence = True
 
-        if defineSequenceOrNot == False:
-            if args.firstTerm == None:
-                firstTerm = startingTerm()
-            else:
-                firstTerm = int(args.firstTerm)
-
-            if args.patternRule == None:
-                patternRule = pattern()
-            else:
-                patternRule = int(args.patternRule)
-
+        if extendSequence != False:
             if args.sequenceLength == None:
                 sequenceLength = lengthOfSequence()
             else:
                 sequenceLength = int(args.sequenceLength)
-
-        else:
-            firstTerm = sequenceOfNumbers[0]
-            patternRule = findPatternRule(sequenceOfNumbers)
 
         if args.nthTerm == None:
             nthTerm = NthTerm()
@@ -56,6 +44,23 @@ def main():
             logFileName = 'n'
 
 
+        if defineSequenceOrNot == False:
+            if args.firstTerm == None:
+                firstTerm = startingTerm()
+            else:
+                firstTerm = int(args.firstTerm)
+
+            if args.patternRule == None:
+                patternRule = pattern()
+            else:
+                patternRule = int(args.patternRule)
+
+        else:
+            firstTerm = int(sequenceOfNumbers[0])
+            patternRule = int(findPatternRule(sequenceOfNumbers))
+
+
+
 # consider making this into a class
 def startingTerm():
     firstTerm = int(input("Enter the first term: ")) 
@@ -66,7 +71,10 @@ def pattern():
     return patternRule
 
 def lengthOfSequence():
-    sequenceLength = int(input("Enter the length of your sequence: "))   
+    if defineSequenceOrNot == False:
+        sequenceLength = int(input("Enter the length of your sequence: ")) 
+    else:
+        sequenceLength = int(input("Number of additional terms to your sequence: "))
     return sequenceLength
 
 def NthTerm():
@@ -75,13 +83,12 @@ def NthTerm():
 
 
 
-def evaluateSequence():
+def evaluateSequence(counter=1):
     sequence = []
-    i = 1
-    while i != (sequenceLength + 1):
-        nextTerm = findNthTerm(i)
+    while counter != (sequenceLength + 1):
+        nextTerm = findNthTerm(counter)
         sequence.append(nextTerm)
-        i += 1
+        counter += 1
     return sequence
 
 def findNthTerm(n):
@@ -97,22 +104,41 @@ def findPatternRule(sequenceOfNumbers):
 
 def outputAnalysis():
     valueOfNthTerm = findNthTerm(nthTerm)
-    sequence = evaluateSequence()
-
-    print("\n\nFind f(n) in the sequence given by:") 
-    print("\tf(1) = ", firstTerm)
-    print("\tf(n) = f(n - 1) -", patternRule,"\n")
-    print(f"Therefore, f({nthTerm}) =", valueOfNthTerm)
 
     if defineSequenceOrNot == False: 
-        print(f"Evaluate the given arithmetic sequence from its first term upto its {sequenceLength}th term: ", end="")
+        sequence = evaluateSequence()
+        print(f"\n\n\nEvaluate the given arithmetic sequence from its first term upto its {sequenceLength}th term: ", end="")
         print(*sequence)
+
+    elif defineSequenceOrNot == True and extendSequence == True:
+        sequence = evaluateSequence(len(sequenceOfNumbers) + 1)
+        print(f"\n\n\nThe next {sequenceLength} of your arithmetic sequence: ", end="")
+        print(*sequence)
+
+    print("\nFind f(n) in the sequence given by:") 
+    print("Recursive definition: ")
+    print("\ta(1) =", firstTerm)
+    print(f"\ta(n) = a(n - 1) + ({patternRule})\n")
+    print("Explicit definiton: ")
+    print(f"\ta(n) = {firstTerm} + ({patternRule})(n - 1)\n")
+    print(f"Therefore, a({nthTerm}) =", valueOfNthTerm,"\n")
+
+
 
 
 
 def askToDefineSequenceOrNot():
+    global sequenceOfNumbers
     defineSequenceYesOrNo = input("Would you like the program to construct a recursive formula for a given sequence? ")
     if re.search("y(es)?", defineSequenceYesOrNo, re.IGNORECASE):
+        sequenceOfNumbers = list(input("Enter your arithmetic sequence: ").rstrip().split())
+        return True
+    else:
+        return False
+
+def askToExtendSequenceOrNot():
+    extendSequenceYesOrNo = input("Would you like to extend your arithmetic sequence?  ")
+    if re.search("y(es)?", extendSequenceYesOrNo, re.IGNORECASE):
         return True
     else:
         return False
@@ -128,5 +154,6 @@ def askToLogOrNot():
 
 
 main()
+
 outputAnalysis()
 #findNthTerm()
