@@ -16,6 +16,7 @@ def main():
     if __name__ == '__main__':
         if args.defineSequence == None:
             defineSequenceOrNot = askToDefineSequenceOrNot()
+            sequenceOfNumbers = list(input("Enter your arithmetic sequence: ").rstrip().split())
         elif args.defineSequence[0].lower() != 'n' or args.defineSequence[0].lower() != 'no':
             defineSequenceOrNot = True
             sequenceOfNumbers = list(input("Enter your arithmetic sequence: ").rstrip().split())
@@ -40,7 +41,7 @@ def main():
 
         else:
             firstTerm = sequenceOfNumbers[0]
-            patternRule = findPatternRule()
+            patternRule = findPatternRule(sequenceOfNumbers)
 
         if args.nthTerm == None:
             nthTerm = NthTerm()
@@ -91,7 +92,7 @@ def findNthTerm(n):
         return patternRule + findNthTerm(n-1)
 
 def findPatternRule(sequenceOfNumbers):
-    patternRule = sequenceOfNumbers[1] - sequenceOfNumbers[0]
+    patternRule = int(sequenceOfNumbers[1]) - int(sequenceOfNumbers[0])
     return patternRule
 
 def outputAnalysis():
