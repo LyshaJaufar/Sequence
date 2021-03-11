@@ -2,6 +2,7 @@ import os, datetime, time, argparse, re
 
 parser = argparse.ArgumentParser(description="Simulate a sequence of numbers for a given starting point at a given common difference")
 parser.add_argument("-l", "--login", help="Name of logfile", nargs=1)
+parser.add_argument("-d", "--defineSequence", help="Would you like the program to define a given sequence? ")
 parser.add_argument("-t", "--firstTerm", help="First term of sequence", nargs=1)
 parser.add_argument("-p", "--patternRule", help="Pattern rule for sequence", nargs=1)
 parser.add_argument("-s", "--sequenceLength", help="Length of the sequence", nargs=1)
@@ -11,27 +12,36 @@ args = parser.parse_args()
 print("\nThis is a program that simulates a sequence of numbers of any length for a given starting point at a given common difference")
 
 def main():
-    global firstTerm, sequenceLength, patternRule, nthTerm
+    global firstTerm, sequenceLength, patternRule, nthTerm, sequenceOfNumbers, defineSequenceOrNot
     if __name__ == '__main__':
-        if args.firstTerm == None:
-            firstTerm = startingTerm()
+        if args.defineSequence == None:
+            defineSequenceYesOrNo = askToDefineSequenceOrNot()
+        elif args.defineSequence[0].lower() != 'n' or args.defineSequence[0].lower() != 'no':
+            defineSequenceOrNot = True
         else:
-            firstTerm = int(args.firstTerm)
+            defineSequenceOrNot = False
 
-        if args.patternRule == None:
-            patternRule = pattern()
+        if defineSequenceOrNot == False:
+            if args.firstTerm == None:
+                firstTerm = startingTerm()
+            else:
+                firstTerm = int(args.firstTerm)
+
+            if args.patternRule == None:
+                patternRule = pattern()
+            else:
+                patternRule = int(args.patternRule)
+
+        if args.nthTerm == None:
+            nthTerm = NthTerm()
         else:
-            patternRule = int(args.patternRule)
+            nthTerm = int(args.nthTerm)
 
         if args.sequenceLength == None:
             sequenceLength = lengthOfSequence()
         else:
             sequenceLength = int(args.sequenceLength)
 
-        if args.nthTerm == None:
-            nthTerm = NthTerm()
-        else:
-            nthTerm = int(args.nthTerm)
 
         if args.login == None:
             logFileName = askToLogOrNot()
@@ -76,6 +86,9 @@ def findNthTerm(n):
     else:
         return patternRule + findNthTerm(n-1)
 
+def defineRecursiveForumula(sequenceOfNumbers):
+    patternRule1 = sequenceOfNumbers[1] - sequenceOfNumbers[0]
+    return patternRule1
 
 def outputAnalysis():
     valueOfNthTerm = findNthTerm(nthTerm)
@@ -93,9 +106,10 @@ def outputAnalysis():
 
 
 
+
 def askToLogOrNot():
     logFileYesOrNo = input("Would you like to save a logfile? ")
-    if re.search("y(yes)?", logFileYesOrNo, re.IGNORECASE):
+    if re.search("y(es)?", logFileYesOrNo, re.IGNORECASE):
         logFileName = input("Logfile filename: ")
     else:
         logFileName = 'n'
