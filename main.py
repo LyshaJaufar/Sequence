@@ -5,7 +5,7 @@ parser.add_argument("-l", "--login", help="Name of logfile", nargs=1)
 parser.add_argument("-d", "--defineSequence", help="Would you like the program to define a given sequence? ")
 parser.add_argument("-t", "--firstTerm", help="First term of sequence", nargs=1)
 parser.add_argument("-p", "--patternRule", help="Pattern rule for sequence", nargs=1)
-parser.add_argument("-s", "--sequenceLength", help="Length of the sequence", nargs=1)
+parser.add_argument("-s", "--sequenceLength", help="Length of the sequence", nargs=1, type=int)
 parser.add_argument("-n", "--nthTerm", help="nth term to find in the sequence", nargs=1)
 parser.add_argument("-o", '--output', help="Would you like to display the evaluation of each term of the sequence?", nargs=1)
 args = parser.parse_args()
@@ -17,7 +17,7 @@ print("\t2. Finds the value of the term a(n) for any positive integer n.")
 print("\t3. And represents the sequence in its recursive and explicit notation.\n")
 
 def main():
-    global firstTerm, sequenceLength, patternRule, nthTerm, sequenceOfNumbers, defineSequenceOrNot, extendSequence 
+    global firstTerm, sequenceLength, patternRule, nthTerm, sequenceOfNumbers, defineSequenceOrNot, extendSequence, showVisualOutputYesOrNo
     if __name__ == '__main__':
         # 3. Represent a given sequence in its recursive and explicit notation
         # 1.b Ask user if they wish to extend the sequence they already provided
@@ -27,7 +27,10 @@ def main():
         elif args.defineSequence[0].lower() != 'n' or args.defineSequence[0].lower() != 'no':
             defineSequenceOrNot = True
             sequenceOfNumbers = list(input("Enter your arithmetic sequence: ").rstrip().split())
-            extendSequence = askToExtendSequenceOrNot()
+            if args.sequenceLength == None:
+                extendSequence = askToExtendSequenceOrNot()
+            else:
+                extendSequence = True
         else:
             defineSequenceOrNot = False
             extendSequence = True
@@ -36,7 +39,7 @@ def main():
         if args.sequenceLength == None:
             sequenceLength = lengthOfSequence()
         else:
-            sequenceLength = int(args.sequenceLength)
+            sequenceLength = int(args.sequenceLength[0])
 
 
         # 1.a Evaluates a sequence of any length by relating to its features:
@@ -45,12 +48,12 @@ def main():
             if args.firstTerm == None:
                 firstTerm = startingTerm()
             else:
-                firstTerm = int(args.firstTerm)
+                firstTerm = int(args.firstTerm[0])
             # Features: 2. Pattern rule
             if args.patternRule == None:
                 patternRule = pattern()
             else:
-                patternRule = int(args.patternRule)
+                patternRule = int(args.patternRule[0])
         # 3. Find the first term and the pattern rule of a sequence provided by the user
         else:
             firstTerm = int(sequenceOfNumbers[0])
@@ -61,7 +64,7 @@ def main():
         if args.nthTerm == None:
             nthTerm = NthTerm()
         else:
-            nthTerm = int(args.nthTerm)
+            nthTerm = int(args.nthTerm[0])
 
         # Display the evaluation of each term
         if args.output == None:
@@ -102,11 +105,10 @@ def evaluateSequence(counter=1):
     return sequence
 
 def visualOutput():
-    print(f"a(n) = a(n - 1) + {patternRule}")
-    print(f"a(1) = {firstTerm}")
+    print(f"\ta(1) = {firstTerm}")
     for i in range(2, sequenceLength + 1):
         prevFunc = int(findNthTerm(i - 1))
-        print(f"a({i}) = a({i - 1}) + ({patternRule}) = {prevFunc} + {patternRule} = {prevFunc + patternRule}")
+        print(f"\ta({i}) = a({i - 1}) + ({patternRule}) = {prevFunc} + {patternRule} = {prevFunc + patternRule}")
 
 
 def outputAnalysis():
@@ -123,13 +125,13 @@ def outputAnalysis():
         print(f"\n\n\nThe next {sequenceLength} of your arithmetic sequence: ", end="")
         print(*sequence)
 
-    showVisualOutputYesOrNo = askToShowVisualOutput()    
     if showVisualOutputYesOrNo == True:
+        print("\nEvaluation of each term: ")
         visualOutput()
 
 
     # 3. Recursive definition 
-    print("\nFind a(n) in the sequence given by:") 
+    print(f"\nFind a({nthTerm}) in the sequence given by:") 
     print("Recursive definition: ")
     print("\ta(1) =", firstTerm)
     print(f"\ta(n) = a(n - 1) + ({patternRule})\n")
