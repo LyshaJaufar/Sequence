@@ -72,28 +72,19 @@ def main():
             logFileName = 'n'
 
 
-# consider making this into a class
-def startingTerm():
-    firstTerm = int(input("Enter the first term: ")) 
-    return firstTerm
 
-def pattern():
-    patternRule = int(input("Enter the pattern rule for your sequence: "))
-    return patternRule
-
-def lengthOfSequence():
-    if defineSequenceOrNot == False:
-        sequenceLength = int(input("Enter the length of your sequence: ")) 
+# Apply the recursive formula to:
+#  --->  output the value of the term a(n), for any nth term
+#  --->  find each term to simulate a sequence of numbers by relating to its features(feataures are provided by user in this case)
+#  --->  generate the next terms of a sequence provided by the user
+def findNthTerm(n):
+    if n == 1:
+        return firstTerm
     else:
-        sequenceLength = int(input("Number of additional terms to your sequence: "))
-    return sequenceLength
+        return patternRule + findNthTerm(n-1)
 
-def NthTerm():
-    nthTerm = int(input("Enter nth term that you wish to find: "))
-    return nthTerm
-
-
-
+# 1.a Simulate a sequence of numbers 
+# 1.b Or extend sequence provided by user
 def evaluateSequence(counter=1):
     sequence = []
     while counter != (sequenceLength + 1):
@@ -102,34 +93,29 @@ def evaluateSequence(counter=1):
         counter += 1
     return sequence
 
-def findNthTerm(n):
-    if n == 1:
-        return firstTerm
-
-    else:
-        return patternRule + findNthTerm(n-1)
-
-def findPatternRule(sequenceOfNumbers):
-    patternRule = int(sequenceOfNumbers[1]) - int(sequenceOfNumbers[0])
-    return patternRule
 
 def outputAnalysis():
     valueOfNthTerm = findNthTerm(nthTerm)
-
+    # 1.a Evaulate a sequence of numbers by relating its features
     if defineSequenceOrNot == False: 
         sequence = evaluateSequence()
         print(f"\n\n\nEvaluate the given arithmetic sequence from its first term upto its {sequenceLength}th term: ", end="")
         print(*sequence)
 
+    # 1.b Extend a sequence provided by the user
     elif defineSequenceOrNot == True and extendSequence == True:
         sequence = evaluateSequence(len(sequenceOfNumbers) + 1)
         print(f"\n\n\nThe next {sequenceLength} of your arithmetic sequence: ", end="")
         print(*sequence)
 
+
+    # 3. Recursive definition 
     print("\nFind f(n) in the sequence given by:") 
     print("Recursive definition: ")
     print("\ta(1) =", firstTerm)
     print(f"\ta(n) = a(n - 1) + ({patternRule})\n")
+
+    # 3. Explicit definition
     print("Explicit definiton: ")
     print(f"\ta(n) = {firstTerm} + ({patternRule})(n - 1)\n")
     print(f"Therefore, a({nthTerm}) =", valueOfNthTerm,"\n")
@@ -137,6 +123,31 @@ def outputAnalysis():
 
 
 
+# 1.a Ask user to provide the first term of the sequence
+def startingTerm():
+    firstTerm = int(input("Enter the first term: ")) 
+    return firstTerm
+
+# 1.a Ask user to provide the pattern rule of the sequence
+def pattern():
+    patternRule = int(input("Enter the pattern rule for your sequence: "))
+    return patternRule
+
+# 1.b Find the pattern rule from a sequence provided by the user
+def findPatternRule(sequenceOfNumbers):
+    patternRule = int(sequenceOfNumbers[1]) - int(sequenceOfNumbers[0])
+    return patternRule
+
+def NthTerm():
+    nthTerm = int(input("Enter nth term that you wish to find: "))
+    return nthTerm
+
+def lengthOfSequence():
+    if defineSequenceOrNot == False:
+        sequenceLength = int(input("Enter the length of your sequence: ")) 
+    else:
+        sequenceLength = int(input("Number of additional terms to your sequence: "))
+    return sequenceLength
 
 def askToDefineSequenceOrNot():
     global sequenceOfNumbers
@@ -162,9 +173,5 @@ def askToLogOrNot():
         logFileName = 'n'
     return logFileName
 
-
-
 main()
-
 outputAnalysis()
-#findNthTerm()
