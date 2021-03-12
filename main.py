@@ -8,7 +8,7 @@ parser.add_argument("-p", "--patternRule", help="Pattern rule for sequence", nar
 parser.add_argument("-s", "--sequenceLength", help="Length of the sequence", nargs=1, type=int)
 parser.add_argument("-n", "--nthTerm", help="nth term to find in the sequence", nargs=1)
 parser.add_argument("-o", '--output', help="Would you like to display the evaluation of each term of the sequence?", nargs=1)
-parser.add_argument("-t", '--formulaType', help="Type of formula(explicit/recursive)")
+parser.add_argument("-f", '--formulaType', help="Type of formula(explicit/recursive)")
 args = parser.parse_args()
 
 print("\n\nThis is a program that performs the following functions and displays the results: \n")
@@ -19,7 +19,8 @@ print("\t3. Finds the value of the term a(n) for any positive integer n.")
 print("\t4. And represents the sequence in its recursive and explicit notation.\n")
 
 def main():
-    global firstTerm, sequenceLength, patternRule, nthTerm, sequenceOfNumbers, defineSequenceOrNot, extendSequence, showVisualOutputYesOrNo
+    global firstTerm, sequenceLength, patternRule, nthTerm, sequenceOfNumbers
+    global defineSequenceOrNot, extendSequence, showVisualOutputYesOrNo, formulaType
     if __name__ == '__main__':
         # 4. Represent a given sequence in its recursive and explicit notation
         # 1.b Ask user if they wish to extend the sequence they already provided
@@ -74,7 +75,7 @@ def main():
         elif args.formulaType[0].lower == 'e' or args.formulaType[0].lower() == 'explicit':
             formulaType = 'explicit'
         else:
-            formualType = 'recursive'
+            formulaType = 'recursive'
 
         # Display the evaluation of each term
         if args.output == None:
@@ -121,7 +122,7 @@ def findNthTermGExplicit(n):
 def evaluateSequence(counter=1):
     sequence = []
     while counter != (sequenceLength + 1 + len(sequenceOfNumbers)):
-        if nthTerm < 995:
+        if formulaType == 'recursive':
             if sequenceType == 'arithmetic':
                 nextTerm = findNthTermForArithmetic(counter)
             else:
@@ -186,28 +187,32 @@ def outputAnalysis():
     print(f"Series formed from the sequence: {series}\n", end="") 
 
     if sequenceType == 'arithmetic':
-        # 4. Recursive definition 
-        print(f"\nFind a({nthTerm}) in the sequence given by:") 
-        print("Recursive definition: ")
-        print("\ta(1) =", firstTerm)
-        print(f"\ta(n) = a(n - 1) + ({patternRule})\n")
+        if formulaType == 'explicit':
+            # 4. Explicit definition
+            print("Explicit definiton: ")
+            print(f"\ta(n) = {firstTerm} + ({patternRule})(n - 1)\n")
+            print(f"Therefore, a({nthTerm}) =", valueOfNthTermForArithmetic,"\n")
+        else:
+            # 4. Recursive definition 
+            print(f"\nFind a({nthTerm}) in the sequence given by:") 
+            print("Recursive definition: ")
+            print("\ta(1) =", firstTerm)
+            print(f"\ta(n) = a(n - 1) + ({patternRule})\n")
 
-        # 4. Explicit definition
-        print("Explicit definiton: ")
-        print(f"\ta(n) = {firstTerm} + ({patternRule})(n - 1)\n")
-        print(f"Therefore, a({nthTerm}) =", valueOfNthTermForArithmetic,"\n")
 
     else:
-        # 4. Recursive definition 
-        print(f"\nFind a({nthTerm}) in the sequence given by:") 
-        print("Recursive definition: ")
-        print("\ta(1) =", firstTerm)
-        print(f"\ta(n) = a(n - 1) * ({patternRule})\n")
+        if formulaType == 'explicit':
+            # 4. Explicit definition
+            print("Explicit definiton: ")
+            print(f"\ta(n) = {firstTerm} * ({patternRule})(n - 1)\n")
+            print(f"Therefore, a({nthTerm}) =", valueOfNthTermForGeometric,"\n")
+        else:
+            # 4. Recursive definition 
+            print(f"\nFind a({nthTerm}) in the sequence given by:") 
+            print("Recursive definition: ")
+            print("\ta(1) =", firstTerm)
+            print(f"\ta(n) = a(n - 1) * ({patternRule})\n")
 
-        # 4. Explicit definition
-        print("Explicit definiton: ")
-        print(f"\ta(n) = {firstTerm} * ({patternRule})(n - 1)\n")
-        print(f"Therefore, a({nthTerm}) =", valueOfNthTermForGeometric,"\n")
 
 
 
@@ -248,7 +253,7 @@ def askToDefineSequenceOrNot():
     global sequenceOfNumbers
     defineSequenceYesOrNo = input("Would you like the program to construct a recursive formula for a given sequence? ")
     if re.search("y(es)?", defineSequenceYesOrNo, re.IGNORECASE):
-        sequenceOfNumbers = list(input("Enter your arithmetic sequence: ").rstrip().split())
+        sequenceOfNumbers = list(input("Enter your sequence: ").rstrip().split())
         return True
     else:
         return False
@@ -268,7 +273,7 @@ def askToShowVisualOutput():
         return False
 
 def explicitOrRecursive():
-    askToShowVisualOutputOrNot = input("Would you like to ues the explicit or recursive formula? E/R: ")
+    askToShowVisualOutputOrNot = input("Would you like to use the explicit or recursive formula? E/R: ")
     if re.search("e(xplicit)?", askToShowVisualOutputOrNot, re.IGNORECASE):
         return "explicit"
     else:
