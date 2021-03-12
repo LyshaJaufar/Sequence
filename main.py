@@ -114,6 +114,10 @@ def evaluateSequence(counter=1):
         counter += 1
     return sequence
 
+def findSeries(sequenceX):
+    seriesSum = sum(sequenceX[x] for x in range(len(sequenceX))) 
+    return seriesSum
+
 def visualOutput():
     print(f"\ta(1) = {firstTerm}")
     for i in range(2, sequenceLength + 1):
@@ -128,6 +132,7 @@ def visualOutput():
 def outputAnalysis():
     valueOfNthTermForArithmetic = findNthTermForArithmetic(nthTerm)
     valueOfNthTermForGeometric = findNthTermForGeometric(nthTerm)
+ 
 
     # 1.a Evaulate a sequence of numbers by relating its features
     if defineSequenceOrNot == False: 
@@ -142,8 +147,11 @@ def outputAnalysis():
         print(*sequence)
 
     if showVisualOutputYesOrNo == True:
-        print("\nEvaluation of each term: ")
+        print("Evaluation of each term: ")
         visualOutput()
+
+    series = findSeries(sequence)
+    print(f"Series formed from the sequence: {series}\n", end="") 
 
     if sequenceType == 'arithmetic':
         # 3. Recursive definition 
