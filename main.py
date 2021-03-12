@@ -8,25 +8,27 @@ parser.add_argument("-p", "--patternRule", help="Pattern rule for sequence", nar
 parser.add_argument("-s", "--sequenceLength", help="Length of the sequence", nargs=1, type=int)
 parser.add_argument("-n", "--nthTerm", help="nth term to find in the sequence", nargs=1)
 parser.add_argument("-o", '--output', help="Would you like to display the evaluation of each term of the sequence?", nargs=1)
+parser.add_argument("-t", '--formulaType', help="Type of formula(explicit/recursive)")
 args = parser.parse_args()
 
 print("\n\nThis is a program that performs the following functions and displays the results: \n")
 print("\t1.a Evaluates a sequence of any length by relating to its features (first term of the seequence, pattern rule..)")
 print("\t1.b Or predicts the next n terms of a given arithmetic sequence of any length.")
-print("\t2. Finds the value of the term a(n) for any positive integer n.")
-print("\t3. And represents the sequence in its recursive and explicit notation.\n")
+print("\t2. Calculate the series formed by the sequence.")
+print("\t3. Finds the value of the term a(n) for any positive integer n.")
+print("\t4. And represents the sequence in its recursive and explicit notation.\n")
 
 def main():
     global firstTerm, sequenceLength, patternRule, nthTerm, sequenceOfNumbers, defineSequenceOrNot, extendSequence, showVisualOutputYesOrNo
     if __name__ == '__main__':
-        # 3. Represent a given sequence in its recursive and explicit notation
+        # 4. Represent a given sequence in its recursive and explicit notation
         # 1.b Ask user if they wish to extend the sequence they already provided
         if args.defineSequence == None:
             defineSequenceOrNot = askToDefineSequenceOrNot()
             extendSequence = askToExtendSequenceOrNot()
         elif args.defineSequence[0].lower() != 'n' or args.defineSequence[0].lower() != 'no':
             defineSequenceOrNot = True
-            sequenceOfNumbers = list(input("Enter your arithmetic sequence: ").rstrip().split())
+            sequenceOfNumbers = list(input("Enter your sequence: ").rstrip().split())
             if args.sequenceLength == None:
                 extendSequence = askToExtendSequenceOrNot()
             else:
@@ -55,7 +57,7 @@ def main():
                 patternRule = pattern()
             else:
                 patternRule = int(args.patternRule[0])
-        # 3. Find the first term and the pattern rule of a sequence provided by the user
+        # 4. Find the first term and the pattern rule of a sequence provided by the user
         else:
             firstTerm = int(sequenceOfNumbers[0])
             patternRule = int(findPatternRule(sequenceOfNumbers))
@@ -66,6 +68,13 @@ def main():
             nthTerm = NthTerm()
         else:
             nthTerm = int(args.nthTerm[0])
+
+        if args.formulaType == None:
+            formulaType = explicitOrRecursive()
+        elif args.formulaType[0].lower == 'e' or args.formulaType[0].lower() == 'explicit':
+            formulaType = 'explicit'
+        else:
+            formualType = 'recursive'
 
         # Display the evaluation of each term
         if args.output == None:
@@ -101,17 +110,31 @@ def findNthTermForGeometric(n):
     else:
         return patternRule * findNthTermForGeometric(n-1)
 
+def findNthTermAExplicit(n):
+    return (firstTerm + patternRule) * (n - 1) 
+
+def findNthTermGExplicit(n):
+    return firstTerm * (patternRule)**(n-1)
+
 # 1.a Simulate a sequence of numbers 
 # 1.b Or extend sequence provided by user
 def evaluateSequence(counter=1):
     sequence = []
     while counter != (sequenceLength + 1 + len(sequenceOfNumbers)):
-        if sequenceType == 'arithmetic':
-            nextTerm = findNthTermForArithmetic(counter)
+        if nthTerm < 995:
+            if sequenceType == 'arithmetic':
+                nextTerm = findNthTermForArithmetic(counter)
+            else:
+                nextTerm = findNthTermForGeometric(counter)
+            sequence.append(nextTerm)
+            counter += 1
         else:
-            nextTerm = findNthTermForGeometric(counter)
-        sequence.append(nextTerm)
-        counter += 1
+            if sequenceType == 'arithmetic':
+                nextTerm = findNthTermAExplicit(counter)
+            else:
+                nextTerm = findNthTermGExplicit(counter)
+            sequence.append(nextTerm)
+            counter += 1
     return sequence
 
 def findSeries(sequenceX):
@@ -122,17 +145,26 @@ def visualOutput():
     print(f"\ta(1) = {firstTerm}")
     for i in range(2, sequenceLength + 1):
         if sequenceType == 'arithmetic':
-            prevFunc = int(findNthTermForArithmetic(i - 1))
-            print(f"\ta({i}) = a({i - 1}) + ({patternRule}) = {prevFunc} + {patternRule} = {prevFunc + patternRule}")
+            if nthTerm < 995:
+                prevFunc = int(findNthTermForArithmetic(i - 1))
+            else:
+                prevFunc = int(findNthTermAExplicit(i - 1))
+            print(f"\ta({i}) = {firstTerm} + {i - 1} * ({patternRule}) = {firstTerm + ((i-1) * patternRule)}")
         else:
-            prevFunc = int(findNthTermForGeometric(i - 1))
-            print(f"\ta({i}) = a({i - 1}) * ({patternRule}) = {prevFunc} * {patternRule} = {prevFunc * patternRule}")
+            if nthTerm < 995:
+                prevFunc = int(findNthTermForGeometric(i - 1))
+            else:
+                prevFunc = int(findNthTermGExplicit(i - 1))
+            print(f"\ta({i}) = {firstTerm} * ({patternRule})**{i - 1}  = {firstTerm* patternRule * (i-1)}")
 
 
 def outputAnalysis():
-    valueOfNthTermForArithmetic = findNthTermForArithmetic(nthTerm)
-    valueOfNthTermForGeometric = findNthTermForGeometric(nthTerm)
- 
+    if nthTerm < 995:
+        valueOfNthTermForArithmetic = findNthTermForArithmetic(nthTerm)
+        valueOfNthTermForGeometric = findNthTermForGeometric(nthTerm)
+    else:
+        valueOfNthTermForArithmetic = findNthTermAExplicit(nthTerm)
+        valueOfNthTermForGeometric = findNthTermGExplicit(nthTerm)
 
     # 1.a Evaulate a sequence of numbers by relating its features
     if defineSequenceOrNot == False: 
@@ -154,25 +186,25 @@ def outputAnalysis():
     print(f"Series formed from the sequence: {series}\n", end="") 
 
     if sequenceType == 'arithmetic':
-        # 3. Recursive definition 
+        # 4. Recursive definition 
         print(f"\nFind a({nthTerm}) in the sequence given by:") 
         print("Recursive definition: ")
         print("\ta(1) =", firstTerm)
         print(f"\ta(n) = a(n - 1) + ({patternRule})\n")
 
-        # 3. Explicit definition
+        # 4. Explicit definition
         print("Explicit definiton: ")
         print(f"\ta(n) = {firstTerm} + ({patternRule})(n - 1)\n")
         print(f"Therefore, a({nthTerm}) =", valueOfNthTermForArithmetic,"\n")
 
     else:
-        # 3. Recursive definition 
+        # 4. Recursive definition 
         print(f"\nFind a({nthTerm}) in the sequence given by:") 
         print("Recursive definition: ")
         print("\ta(1) =", firstTerm)
         print(f"\ta(n) = a(n - 1) * ({patternRule})\n")
 
-        # 3. Explicit definition
+        # 4. Explicit definition
         print("Explicit definiton: ")
         print(f"\ta(n) = {firstTerm} * ({patternRule})(n - 1)\n")
         print(f"Therefore, a({nthTerm}) =", valueOfNthTermForGeometric,"\n")
@@ -235,6 +267,13 @@ def askToShowVisualOutput():
     else:
         return False
 
+def explicitOrRecursive():
+    askToShowVisualOutputOrNot = input("Would you like to ues the explicit or recursive formula? E/R: ")
+    if re.search("e(xplicit)?", askToShowVisualOutputOrNot, re.IGNORECASE):
+        return "explicit"
+    else:
+        return "recursive"
+
 def determineArithmeticOrGeometric():
     if defineSequenceOrNot == True:
         x = int(sequenceOfNumbers[1]) - int(sequenceOfNumbers[0])
@@ -256,5 +295,3 @@ main()
 outputAnalysis()
 
 
-
-# series 996 997
