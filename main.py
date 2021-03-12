@@ -1,6 +1,6 @@
 import os, datetime, time, argparse, re
 
-parser = argparse.ArgumentParser(description="Simulate a sequence of numbers for a given starting point at a given common difference")
+parser = argparse.ArgumentParser(description="Evaluate a given sequence of numbers and display the results")
 parser.add_argument("-l", "--login", help="Name of logfile", nargs=1)
 parser.add_argument("-d", "--defineSequence", help="Would you like the program to define a given sequence? ")
 parser.add_argument("-t", "--firstTerm", help="First term of sequence", nargs=1)
@@ -9,11 +9,17 @@ parser.add_argument("-s", "--sequenceLength", help="Length of the sequence", nar
 parser.add_argument("-n", "--nthTerm", help="nth term to find in the sequence", nargs=1)
 args = parser.parse_args()
 
-print("\nThis is a program that simulates a sequence of numbers of any length for a given starting point at a given common difference")
+print("\n\nThis is a program that performs the following functions and displays the results: \n")
+print("\t1.a Evaluates a sequence of any length by relating to its features (first term of the seequence, pattern rule..)")
+print("\t1.b Or predicts the next n terms of a given arithmetic sequence of any length.")
+print("\t2. Finds the value of the term a(n) for any positive integer n.")
+print("\t3. And represents the sequence in its recursive and explicit notation.\n")
 
 def main():
     global firstTerm, sequenceLength, patternRule, nthTerm, sequenceOfNumbers, defineSequenceOrNot, extendSequence 
     if __name__ == '__main__':
+        # 3. Represent a given sequence in its recursive and explicit notation
+        # 1.b Ask user if they wish to extend the sequence they already provided
         if args.defineSequence == None:
             defineSequenceOrNot = askToDefineSequenceOrNot()
             extendSequence = askToExtendSequenceOrNot()
@@ -25,40 +31,45 @@ def main():
             defineSequenceOrNot = False
             extendSequence = True
 
+        # User chooses not to extend sequence they provided
         if extendSequence != False:
             if args.sequenceLength == None:
                 sequenceLength = lengthOfSequence()
             else:
                 sequenceLength = int(args.sequenceLength)
 
+
+        # 1.a Evaluates a sequence of any length by relating to its features:
+        if defineSequenceOrNot == False:
+            # Features: 1.First term
+            if args.firstTerm == None:
+                firstTerm = startingTerm()
+            else:
+                firstTerm = int(args.firstTerm)
+            # Features: 2. Pattern rule
+            if args.patternRule == None:
+                patternRule = pattern()
+            else:
+                patternRule = int(args.patternRule)
+        # 3. Find the first term and the pattern rule of a sequence provided by the user
+        else:
+            firstTerm = int(sequenceOfNumbers[0])
+            patternRule = int(findPatternRule(sequenceOfNumbers))
+
+
+        # Ask user to input a positive integer n.
         if args.nthTerm == None:
             nthTerm = NthTerm()
         else:
             nthTerm = int(args.nthTerm)
 
+        # Save data onto a logfile
         if args.login == None:
             logFileName = askToLogOrNot()
         elif args.login[0].lower() != 'n' or args.login[0].lower() != 'no':
             loginFileName = args.login[0]
         else:
             logFileName = 'n'
-
-
-        if defineSequenceOrNot == False:
-            if args.firstTerm == None:
-                firstTerm = startingTerm()
-            else:
-                firstTerm = int(args.firstTerm)
-
-            if args.patternRule == None:
-                patternRule = pattern()
-            else:
-                patternRule = int(args.patternRule)
-
-        else:
-            firstTerm = int(sequenceOfNumbers[0])
-            patternRule = int(findPatternRule(sequenceOfNumbers))
-
 
 
 # consider making this into a class
