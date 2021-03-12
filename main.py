@@ -7,6 +7,7 @@ parser.add_argument("-t", "--firstTerm", help="First term of sequence", nargs=1)
 parser.add_argument("-p", "--patternRule", help="Pattern rule for sequence", nargs=1)
 parser.add_argument("-s", "--sequenceLength", help="Length of the sequence", nargs=1)
 parser.add_argument("-n", "--nthTerm", help="nth term to find in the sequence", nargs=1)
+parser.add_argument("-o", '--output', help="Would you like to display the evaluation of each term of the sequence?", nargs=1)
 args = parser.parse_args()
 
 print("\n\nThis is a program that performs the following functions and displays the results: \n")
@@ -31,12 +32,11 @@ def main():
             defineSequenceOrNot = False
             extendSequence = True
 
-        # User chooses not to extend sequence they provided
-        if extendSequence != False:
-            if args.sequenceLength == None:
-                sequenceLength = lengthOfSequence()
-            else:
-                sequenceLength = int(args.sequenceLength)
+        # User chooses to extend sequence they provided
+        if args.sequenceLength == None:
+            sequenceLength = lengthOfSequence()
+        else:
+            sequenceLength = int(args.sequenceLength)
 
 
         # 1.a Evaluates a sequence of any length by relating to its features:
@@ -62,6 +62,14 @@ def main():
             nthTerm = NthTerm()
         else:
             nthTerm = int(args.nthTerm)
+
+        # Display the evaluation of each term
+        if args.output == None:
+            showVisualOutputYesOrNo = askToShowVisualOutput()
+        elif args.output[0].lower() == 'y' or args.output[0].lower() == 'yes':
+            showVisualOutputYesOrNo = True
+        else:
+            showVisualOutputYesOrNo = False
 
         # Save data onto a logfile
         if args.login == None:
@@ -93,6 +101,13 @@ def evaluateSequence(counter=1):
         counter += 1
     return sequence
 
+def visualOutput():
+    print(f"a(n) = a(n - 1) + {patternRule}")
+    print(f"a(1) = {firstTerm}")
+    for i in range(2, sequenceLength + 1):
+        prevFunc = int(findNthTerm(i - 1))
+        print(f"a({i}) = a({i - 1}) + ({patternRule}) = {prevFunc} + {patternRule} = {prevFunc + patternRule}")
+
 
 def outputAnalysis():
     valueOfNthTerm = findNthTerm(nthTerm)
@@ -108,9 +123,13 @@ def outputAnalysis():
         print(f"\n\n\nThe next {sequenceLength} of your arithmetic sequence: ", end="")
         print(*sequence)
 
+    showVisualOutputYesOrNo = askToShowVisualOutput()    
+    if showVisualOutputYesOrNo == True:
+        visualOutput()
+
 
     # 3. Recursive definition 
-    print("\nFind f(n) in the sequence given by:") 
+    print("\nFind a(n) in the sequence given by:") 
     print("Recursive definition: ")
     print("\ta(1) =", firstTerm)
     print(f"\ta(n) = a(n - 1) + ({patternRule})\n")
@@ -119,6 +138,8 @@ def outputAnalysis():
     print("Explicit definiton: ")
     print(f"\ta(n) = {firstTerm} + ({patternRule})(n - 1)\n")
     print(f"Therefore, a({nthTerm}) =", valueOfNthTerm,"\n")
+
+
 
 
 
@@ -143,7 +164,7 @@ def NthTerm():
     return nthTerm
 
 def lengthOfSequence():
-    if defineSequenceOrNot == False:
+    if extendSequence == False:
         sequenceLength = int(input("Enter the length of your sequence: ")) 
     else:
         sequenceLength = int(input("Number of additional terms to your sequence: "))
@@ -165,6 +186,13 @@ def askToExtendSequenceOrNot():
     else:
         return False
 
+def askToShowVisualOutput():
+    askToShowVisualOutputOrNot = input("Would you like to visually output the evaluation of each term? Y/N: ")
+    if re.search("y(es)?", askToShowVisualOutputOrNot, re.IGNORECASE):
+        return True
+    else:
+        return False
+
 def askToLogOrNot():
     logFileYesOrNo = input("Would you like to save a logfile? ")
     if re.search("y(es)?", logFileYesOrNo, re.IGNORECASE):
@@ -175,3 +203,7 @@ def askToLogOrNot():
 
 main()
 outputAnalysis()
+
+
+
+# series 996 997
