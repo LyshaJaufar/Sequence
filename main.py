@@ -118,7 +118,7 @@ def findNthTermGExplicit(n):
 def evaluateSequence(counter=1):
     sequence = []
     while counter != (sequenceLength + 1 + len(sequenceOfNumbers)):
-        if nthTerm < 996:
+        if sequenceLength < 900:
             if sequenceType == 'arithmetic':
                 nextTerm = findNthTermForArithmetic(counter)
             else:
@@ -146,7 +146,7 @@ def visualOutputExplicit():
             print(f"\ta({i}) = {firstTerm} + {i - 1} * ({patternRule}) = {firstTerm + ((i-1) * patternRule)}")
         else:
             prevFunc = int(findNthTermGExplicit(i - 1))
-            print(f"\ta({i}) = {firstTerm} * ({patternRule})**{i - 1}  = {firstTerm* patternRule * (i-1)}")
+            print(f"\ta({i}) = {firstTerm} * ({patternRule})**{i - 1}  = {firstTerm * patternRule**(i-1)}")
 
 def visualOutputRecursive():
     print(f"\ta(1) = {firstTerm}")
@@ -156,7 +156,7 @@ def visualOutputRecursive():
             print(f"\ta({i}) = a({i - 1}) + {patternRule} = {prevFunc} + {patternRule} = {prevFunc + patternRule}")
         else:
             prevFunc = int(findNthTermForGeometric(i - 1))
-            print(f"\ta({i}) = {firstTerm} * {patternRule}**{i - 1}  = {firstTerm* patternRule * (i-1)}")
+            print(f"\ta({i}) = a({i - 1}) * {patternRule} = {prevFunc} * {patternRule} = {prevFunc * patternRule}")
 
 def outputAnalysis():
     global sequenceType
@@ -165,7 +165,7 @@ def outputAnalysis():
     else:
         sequenceType = askArithmeticOrGeometric()
 
-    if nthTerm > 995:
+    if nthTerm > 900:
         valueOfNthTermForArithmetic = findNthTermAExplicit(nthTerm)
         valueOfNthTermForGeometric = findNthTermGExplicit(nthTerm)
     else:
@@ -187,7 +187,8 @@ def outputAnalysis():
     if showVisualOutputYesOrNo == True:
         print("Evaluation of each term using the explicit formula: ")
         visualOutputExplicit()
-        if nthTerm < 996:
+        # program breaks if sequence length > 900 --> too many recursive calls 
+        if sequenceLength < 900:
             print("\nEvaluation of each term using the recursive formula: ")
             visualOutputRecursive()
 
