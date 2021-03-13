@@ -175,7 +175,7 @@ def outputAnalysis():
     # 1.a Evaulate a sequence of numbers by relating its features
     if defineSequenceOrNot == False: 
         sequence = evaluateSequence()
-        print(f"\n\n\nEvaluate the given arithmetic sequence from its first term upto its {sequenceLength}th term: ", end="")
+        print(f"\n\n\nEvaluate the given sequence from its first term upto its {sequenceLength}th term: ", end="")
         print(*sequence)
 
     # 1.b Extend a sequence provided by the user
@@ -200,12 +200,12 @@ def outputAnalysis():
 
         # 4. Explicit definition
         print("Explicit definiton: ")
-        print(f"\ta(n) = {firstTerm} + ({patternRule})(n - 1)\n")
+        print(f"\ta(n) = {firstTerm} + {patternRule}(n - 1)\n")
 
         # 4. Recursive definition 
         print("Recursive definition: ")
         print("\ta(1) =", firstTerm)
-        print(f"\ta(n) = a(n - 1) + ({patternRule})\n")
+        print(f"\ta(n) = a(n - 1) + {patternRule}\n")
         print(f"Therefore, a({nthTerm}) =", valueOfNthTermForArithmetic,"\n")
 
     else:
@@ -286,12 +286,12 @@ def visualOutputRecursiveForLogfile():
 
 # 1.a Ask user to provide the first term of the sequence
 def startingTerm():
-    firstTerm = int(input("Enter the first term: ")) 
+    firstTerm = int(input("1.b Enter the first term: ")) 
     return firstTerm
 
 # 1.a Ask user to provide the pattern rule of the sequence
 def pattern():
-    patternRule = int(input("Enter the pattern rule for your sequence: "))
+    patternRule = int(input("1.b Enter the pattern rule for your sequence: "))
     return patternRule
 
 # 1.b Find the pattern rule from a sequence provided by the user
@@ -305,7 +305,7 @@ def findPatternRule(sequenceOfNumbers):
     return patternRule
 
 def NthTerm():
-    nthTerm = int(input("Enter nth term that you wish to find: "))
+    nthTerm = int(input("3. Enter any positive integer n to find the value of the term a(n) of your sequence: "))
     return nthTerm
 
 def lengthOfSequence():
@@ -317,7 +317,7 @@ def lengthOfSequence():
 
 def askToDefineSequenceOrNot():
     global sequenceOfNumbers
-    defineSequenceYesOrNo = input("Would you like the program to construct a recursive/explicit formula for a given sequence? Y/N: ")
+    defineSequenceYesOrNo = input("1.a Would you like the program to construct a recursive/explicit formula for a given sequence? Y/N: ")
     if re.search("y(es)?", defineSequenceYesOrNo, re.IGNORECASE):
         sequenceOfNumbers = list(input("Enter your sequence: ").rstrip().split())
         return True
