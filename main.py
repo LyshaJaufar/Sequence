@@ -8,7 +8,6 @@ parser.add_argument("-p", "--patternRule", help="Pattern rule for sequence", nar
 parser.add_argument("-s", "--sequenceLength", help="Length of the sequence", nargs=1, type=int)
 parser.add_argument("-n", "--nthTerm", help="nth term to find in the sequence", nargs=1)
 parser.add_argument("-o", '--output', help="Would you like to display the evaluation of each term of the sequence?", nargs=1)
-parser.add_argument("-st", "--sequenceType", help="Is sequence arithmetic/geometric?", nargs=1)
 args = parser.parse_args()
 
 print("\n\nThis is a program that performs the following functions and displays the results: \n")
@@ -52,7 +51,6 @@ def main():
 
         # 1.a Evaluates a sequence of any length by relating to its features:
         if defineSequenceOrNot == False:
-
             # Features: 1.First term
             if args.firstTerm == None:
                 firstTerm = startingTerm()
