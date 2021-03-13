@@ -154,7 +154,7 @@ def visualOutputRecursive():
             print(f"\ta({i}) = a({i - 1}) * {patternRule} = {prevFunc} * {patternRule} = {prevFunc * patternRule}")
 
 def outputAnalysis():
-    global sequenceType, sequence, series
+    global sequenceType, sequence, series, valueOfNthTermForArithmetic, valueOfNthTermForGeometric, elapsedtime
     if defineSequenceOrNot == True:
         sequenceType = determineArithmeticOrGeometric()
     else:
@@ -223,10 +223,11 @@ def outputAnalysis():
 
     elapsedtime = str(datetime.timedelta(seconds=round(time.time()-starttime, 2)))
     elapsedtime = elapsedtime[:-4]
-    print("Total execution time:", elapsedtime)
+    print("Total execution time:", elapsedtime,"\n")
 
 
 def outputLogfile():
+    global logfile
     if logFileName.lower() != 'n':
         logfile = open(os.getcwd() + '/' + logFileName,'w')
         print("A logfile was published to ", os.getcwd() + '/' + logFileName)
@@ -240,12 +241,12 @@ def outputLogfile():
         for i in range(len(sequence)):
             logfile.write(str(sequence[i]) + ' ')
         if showVisualOutputYesOrNo == True:
-            logfile.write("Evaluation of each term using the explicit formula: \n")
+            logfile.write("\nEvaluation of each term using the explicit formula: \n")
             visualOutputExplicitForLogfile()
             if sequenceLength < 900:
                 logfile.write("\nEvaluation of each term using the recursive formula:\n")
                 visualOutputRecursiveForLogfile()
-        logfile.write("Series formed from the sequence: " +str(series) + "\n")
+        logfile.write("\n\nSeries formed from the sequence: " +str(series) + "\n\n")
         if sequenceType == 'arithmetic':
             logfile.write("Find a("+str(nthTerm)+") in the sequence given by:\n")
 
@@ -257,15 +258,13 @@ def outputLogfile():
             logfile.write("Recursive definition: \n")
             logfile.write("\ta(1) = " + str(firstTerm) + "\n")
             logfile.write("\ta(n) = a(n - 1) + " +str(patternRule)+"\n\n")
-            logfile.write("Therefore, a("+str(nthTerm)") = " str(valueOfNthTermForArithmetic) + "\n\n")
-
-            
- 
+            logfile.write("Therefore, a("+str(nthTerm)+") = " +str(valueOfNthTermForArithmetic)+ "\n")
+        logfile.write("Total execution time: " +str(elapsedtime)+ "\n\n")
     else:
         print("No log created")
 
 def visualOutputExplicitForLogfile():
-    print("\ta(1) = "+str(firstTerm)+"\n")
+    logfile.write("\ta(1) = "+str(firstTerm)+"\n")
     for i in range(2, sequenceLength + 1):
         if sequenceType == 'arithmetic':
             prevFunc = int(findNthTermAExplicit(i - 1))
@@ -275,14 +274,14 @@ def visualOutputExplicitForLogfile():
             logfile.write("\ta("+str(i)+") = "+str(firstTerm)+" * "+str(patternRule)+"**"+str(i - 1)+"  = "+str(firstTerm * patternRule**(i-1))+"\n")
 
 def visualOutputRecursiveForLogfile():
-    print("\ta(1) = "+str(firstTerm)+"\n")
+    logfile.write("\ta(1) = "+str(firstTerm)+"\n")
     for i in range(2, sequenceLength + 1):
         if sequenceType == 'arithmetic':
             prevFunc = int(findNthTermForArithmetic(i - 1))
-            print("\ta("+str(i)+") = a("+str(i - 1)+") + "+str(patternRule)+" = "+str(prevFunc)+" + "+str(patternRule)+" = "+str(prevFunc + patternRule)+"\n")
+            logfile.write("\ta("+str(i)+") = a("+str(i - 1)+") + "+str(patternRule)+" = "+str(prevFunc)+" + "+str(patternRule)+" = "+str(prevFunc + patternRule)+"\n")
         else:
             prevFunc = int(findNthTermForGeometric(i - 1))
-            print("\ta("+str(i)+") = a("+str(i - 1)+") * "+str(patternRule)+" = "+str(prevFunc)+" * "+str(patternRule)+" = "+str(prevFunc * patternRule)+"\n")
+            logfile.write("\ta("+str(i)+") = a("+str(i - 1)+") * "+str(patternRule)+" = "+str(prevFunc)+" * "+str(patternRule)+" = "+str(prevFunc * patternRule)+"\n")
 
 
 # 1.a Ask user to provide the first term of the sequence

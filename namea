@@ -1,7 +1,6 @@
 User inputted sequence: 90 180 270 
 
-Sequence above extended upto its 15th term: 360 450 540 630 720 810 900 990 1080 1170 1260 1350 1440 1530 1620 
-Evaluation of each term using the explicit formula: 
+Sequence above extended upto its 15th term: 360 450 540 630 720 810 900 990 1080 1170 1260 1350 1440 1530 1620 Evaluation of each term using the explicit formula: 
 	a(1) = 90
 	a(2) = 90 + 1 * 90 = 180
 	a(3) = 90 + 2 * 90 = 270
@@ -34,11 +33,8 @@ Evaluation of each term using the recursive formula:
 	a(13) = a(12) + 90 = 1080 + 90 = 1170
 	a(14) = a(13) + 90 = 1170 + 90 = 1260
 	a(15) = a(14) + 90 = 1260 + 90 = 1350
-
-
 Series formed from the sequence: 14850
-
-Find a(75820) in the sequence given by:
+Find a(7900) in the sequence given by:
 Explicit definition: 
 	a(n) = 90 + 90(n - 1)
 
@@ -46,6 +42,5 @@ Recursive definition:
 	a(1) = 90
 	a(n) = a(n - 1) + 90
 
-Therefore, a(75820) = 13647420
-Total execution time: 0:00:21.53
+Therefore, a(7900) = 1421820
 
