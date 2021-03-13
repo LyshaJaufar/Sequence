@@ -19,8 +19,9 @@ print("\t4. And represents the sequence in its recursive and explicit notation.\
 
 def main():
     global firstTerm, sequenceLength, patternRule, nthTerm, sequenceOfNumbers
-    global defineSequenceOrNot, extendSequence, showVisualOutputYesOrNo, sequenceType
+    global defineSequenceOrNot, extendSequence, showVisualOutputYesOrNo, sequenceType, starttime
     if __name__ == '__main__':
+        starttime = time.time()
         # 4. Represent a given sequence in its recursive and explicit notation
         # 1.b Ask user if they wish to extend the sequence they already provided
         if args.firstTerm == None:
@@ -220,6 +221,9 @@ def outputAnalysis():
         print(f"\ta(n) = a(n - 1) * ({patternRule})\n")
         print(f"Therefore, a({nthTerm}) =", valueOfNthTermForGeometric,"\n")
 
+    elapsedtime = str(datetime.timedelta(seconds=round(time.time()-starttime, 2)))
+    elapsedtime = elapsedtime[:-4]
+    print("Total execution time:", elapsedtime)
 
 
 
@@ -293,8 +297,6 @@ def askArithmeticOrGeometric():
         return "arithmetic"
     else:
         return "geometric"
-
-
 
 def askToLogOrNot():
     logFileYesOrNo = input("Would you like to save a logfile? ")
