@@ -1,0 +1,32 @@
+User inputted 'first term': 22
+User inputted 'pattern rule': -42
+
+Sequence above extended upto its 5th term: 22 -20 -62 -104 -146 
+Evaluation of each term using the explicit formula: 
+	a(1) = 22
+	a(2) = 22 + 1 * -42 = -20
+	a(3) = 22 + 2 * -42 = -62
+	a(4) = 22 + 3 * -42 = -104
+	a(5) = 22 + 4 * -42 = -146
+
+Evaluation of each term using the recursive formula:
+	a(1) = 22
+	a(2) = a(1) + -42 = 22 + -42 = -20
+	a(3) = a(2) + -42 = -20 + -42 = -62
+	a(4) = a(3) + -42 = -62 + -42 = -104
+	a(5) = a(4) + -42 = -104 + -42 = -146
+
+
+Series formed from the sequence: -310
+
+Find a(500500) in the sequence given by:
+Explicit definition: 
+	a(n) = 22 + -42(n - 1)
+
+Recursive definition: 
+	a(1) = 22
+	a(n) = a(n - 1) + -42
+
+Therefore, a(500500) = -10009980
+Total execution time: 0:00:38.20
+
