@@ -2,12 +2,12 @@ import os, datetime, time, argparse, re
 
 parser = argparse.ArgumentParser(description="Evaluate a given sequence of numbers and display the results")
 parser.add_argument("-l", "--login", help="Name of logfile", nargs=1)
-parser.add_argument("-d", "--defineSequence", help="Would you like the program to define a given sequence? ")
 parser.add_argument("-t", "--firstTerm", help="First term of sequence", nargs=1)
 parser.add_argument("-p", "--patternRule", help="Pattern rule for sequence", nargs=1)
 parser.add_argument("-s", "--sequenceLength", help="Length of the sequence", nargs=1, type=int)
 parser.add_argument("-n", "--nthTerm", help="nth term to find in the sequence", nargs=1)
 parser.add_argument("-o", '--output', help="Would you like to display the evaluation of each term of the sequence?", nargs=1)
+parser.add_argument("-st", '--sequenceType', help='Sequence type: Arithmetic/Geometric')
 args = parser.parse_args()
 
 print("\n\nThis is a program that performs the following functions and displays the results: \n")
@@ -23,23 +23,17 @@ def main():
     if __name__ == '__main__':
         # 4. Represent a given sequence in its recursive and explicit notation
         # 1.b Ask user if they wish to extend the sequence they already provided
-        if args.defineSequence == None:
-            defineSequenceOrNot = askToDefineSequenceOrNot()
-            if defineSequenceOrNot == True:
-                extendSequence = askToExtendSequenceOrNot()
+        if args.firstTerm == None:
+            if args.patternRule == None:
+                defineSequenceOrNot = askToDefineSequenceOrNot()
             else:
-                extendSequence = False
-                sequenceOfNumbers = []
-        elif args.defineSequence[0].lower() != 'n' or args.defineSequence[0].lower() != 'no':
-            defineSequenceOrNot = True
-            sequenceOfNumbers = list(input("Enter your sequence: ").rstrip().split())
-            if args.sequenceLength == None:
-                extendSequence = askToExtendSequenceOrNot()
-            else:
-                extendSequence = True
+                defineSequenceOrNot = False
         else:
             defineSequenceOrNot = False
-            extendSequence = True
+        if defineSequenceOrNot == True:
+            extendSequence = askToExtendSequenceOrNot()
+        else:
+            extendSequence = False
             sequenceOfNumbers = []
 
         # User chooses to extend sequence they provided
@@ -73,7 +67,7 @@ def main():
         else:
             nthTerm = int(args.nthTerm[0])
 
-        # Display the evaluation of each term
+        # Display tie evaluation of each term
         if args.output == None:
             showVisualOutputYesOrNo = askToShowVisualOutput()
         elif args.output[0].lower() == 'y' or args.output[0].lower() == 'yes':
@@ -163,7 +157,12 @@ def outputAnalysis():
     if defineSequenceOrNot == True:
         sequenceType = determineArithmeticOrGeometric()
     else:
-        sequenceType = askArithmeticOrGeometric()
+        if args.sequenceType == None:
+            sequenceType = askArithmeticOrGeometric()
+        elif args.sequenceType[0] == 'g' or args.sequenceType[0] == 'geometric':
+            sequenceType = 'geometric'
+        else:
+            sequenceType = 'arithmetic'
 
     if nthTerm > 900:
         valueOfNthTermForArithmetic = findNthTermAExplicit(nthTerm)
@@ -250,7 +249,7 @@ def NthTerm():
     return nthTerm
 
 def lengthOfSequence():
-    if extendSequence == False:
+    if extendSequence == False and defineSequenceOrNot == False:
         sequenceLength = int(input("Enter the length of your sequence: ")) 
     else:
         sequenceLength = int(input("Number of additional terms to your sequence: "))
